@@ -1,0 +1,62 @@
+language: node_js
+sudo: required
+
+node_js:
+  - 10
+
+env:
+  global:
+    - KUBECTL_VERSION=v1.11.0
+
+branches:
+  only:
+    - master
+    - develop
+    - /^release\/.+/
+    - /^ci\/.+/
+
+services:
+  - redis-server
+  - docker
+
+
+before_script:
+  - yarn install --pure-lockfile
+  - yarn run build
+
+cache:
+  directories:
+    - node_modules
+    - $HOME/.local
+
+script:
+  - shellcheck -x $(git ls-files | grep '[.]sh$')
+  - ./node_modules/.bin/madge -c .
+  - yarn run test
+  - yarn run lint
+
+before_deploy:
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin:$HOME/bin
+  - >
+    yarn global add
+    semantic-release
+    @semantic-release/changelog
+    @semantic-release/exec
+    @semantic-release/git
+    @semantic-release/github
+    @semantic-release/npm
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    'on':
+      branch: master
+    script: npx semantic-release
+
+  - provider: script
+    skip_cleanup: true
+    'on':
+      branch: ci/semantic-release
+    script: npx semantic-release --branch ci/semantic-release --dry-run
