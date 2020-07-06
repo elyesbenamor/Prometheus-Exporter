@@ -40,13 +40,11 @@ spec:
               drop:
                 - all
           env:
-              # space delimited list of queues
-            - name: EXPORTER_QUEUES
-              value: "mail job_one video audio"
+            - name: EXPORTER_AUTODISCOVER	
+              value: "true"
 
-              # find the redis service in the cluster
             - name: EXPORTER_REDIS_URL
-              value: redis://redis:6379/0
+              #value: redis cluster url
 
           livenessProbe:
             initialDelaySeconds: 30
