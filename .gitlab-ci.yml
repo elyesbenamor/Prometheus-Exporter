@@ -1,0 +1,43 @@
+image: docker:latest
+services:
+  - docker:dind
+
+stages:
+  #- build
+  - deploy
+
+# ===
+# Settings
+variables:
+  #Docker
+  DOCKER_DRIVER: overlay
+  DOCKER_HOST: tcp://localhost:2375
+
+  #Rancher
+  RANCHER_URL_PRODUCTION: https://rancher2.vorwaerts.com
+  RANCHER_ACCESS_KEY: token-dq9lz
+  RANCHER_SECRET_KEY: nxvfjxdv5ds2jb6v76pxns7kzbhkx9r9b9882ffd6gpm5pdk6xsbxv
+#build:container:
+#  stage: build
+ # before_script:
+ #   - apk add make 
+ # script:
+ #   - make docker-build
+ #   - make push
+
+
+deploy:yamls:
+  stage: deploy
+  script:
+    - mkdir $HOME/.kube
+    - cd $HOME/.kube && touch config
+    - cat $KUBECONFIG_CONTENT > $HOME/.kube/config
+    - export KUBECONFIG="$HOME/.kube/config"
+    - apk update  && apk add --no-cache curl
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl 
+    - mv ./kubectl /usr/local/bin/kubectl
+    - kubectl version --client
+    - kubectl create namespace bullexporter
+    - kubectl config set-context $(kubectl config current-context) --namespace=bullexporter
+    - kubectl apply -f $CI_PROJECT_DIR/manifests 
