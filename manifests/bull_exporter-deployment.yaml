@@ -43,7 +43,7 @@ spec:
             - name: EXPORTER_AUTODISCOVER	
               value: "true"
 
-            - name: EXPORTER_REDIS_URL
+            #- name: EXPORTER_REDIS_URL
               #value: redis cluster url
 
           livenessProbe:
