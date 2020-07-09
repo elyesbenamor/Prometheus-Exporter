@@ -38,6 +38,5 @@ deploy:yamls:
     - chmod +x ./kubectl 
     - mv ./kubectl /usr/local/bin/kubectl
     - kubectl version --client
-    - kubectl create namespace bull-exporter
     - kubectl config set-context $(kubectl config current-context) --namespace=bull-exporter
-    - kubectl apply -f $CI_PROJECT_DIR/manifests 
+    - kubectl apply -f $CI_PROJECT_DIR/manifests --namespace=bull-exporter
