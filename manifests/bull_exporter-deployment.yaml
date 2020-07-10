@@ -47,6 +47,9 @@ spec:
 
             - name: EXPORTER_REDIS_URL
               value: redis://redis-master.redis.svc.cluster.local:6379
+            
+            - name: EXPORTER_QUEUES
+              value: "v2prepRep v2newrQueue" 
 
           livenessProbe:
             initialDelaySeconds: 30
