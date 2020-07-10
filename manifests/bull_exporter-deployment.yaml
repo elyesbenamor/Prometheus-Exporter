@@ -46,8 +46,8 @@ spec:
             - name: EXPORTER_AUTODISCOVER	
               value: "true"
 
-            #- name: EXPORTER_REDIS_URL
-              #value: redis cluster url
+            - name: EXPORTER_REDIS_URL
+              value: redis://redis-master.redis.svc.cluster.local:6379
 
           livenessProbe:
             initialDelaySeconds: 30
