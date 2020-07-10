@@ -11,5 +11,4 @@ spec:
       app: bull
       role: exporter
   endpoints:
-  - port: http
-    interval: 15s
+  - port: bullexporter
