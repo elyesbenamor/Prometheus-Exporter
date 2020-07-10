@@ -31,16 +31,16 @@ spec:
               cpu: 200m
               memory: 512M
 
-          #securityContext:
-           # runAsGroup: 65534 
-            #runAsUser: 65534 
-            #runAsNonRoot: true
-            #privileged: false
-            #allowPrivilegeEscalation: false
-            #readOnlyRootFilesystem: true
-            #capabilities:
-             # drop:
-             #   - all
+          securityContext:
+            runAsGroup: 65534 
+            runAsUser: 65534 
+            runAsNonRoot: true
+            privileged: false
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - all
           env:
             - name: EXPORTER_AUTODISCOVER	
               value: "true"
@@ -53,4 +53,4 @@ spec:
             periodSeconds: 15
             httpGet:
               path: /healthz
-              port: 5959
+              port: 9538

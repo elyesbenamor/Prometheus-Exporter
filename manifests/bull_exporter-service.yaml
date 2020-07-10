@@ -9,13 +9,13 @@ metadata:
       role: exporter
     annotations:
       prometheus.io/scrape: 'true'
-      prometheus.io/port: '5959'
+      prometheus.io/port: '9538'
 spec:
     type: ClusterIP
     ports:
     - name: bullexporter
-      port: 5959
-      targetPort: 5959
+      port: 9538
+      targetPort: 9538
     selector:
       app: bull
       role: exporter
